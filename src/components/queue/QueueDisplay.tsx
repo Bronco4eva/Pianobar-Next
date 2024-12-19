@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Database } from '@/lib/types/database'
 
-type Request = Database['public']['Tables']['requests']['Row']
+type Request = Database['public']['Tables']['song_requests']['Row']
 
 export default function QueueDisplay() {
   const [requests, setRequests] = useState<Request[]>([])
@@ -14,7 +14,7 @@ export default function QueueDisplay() {
     const fetchRequests = async () => {
       try {
         const { data, error } = await supabase
-          .from('requests')
+          .from('song_requests')
           .select('*')
           .order('created_at', { ascending: true })
 
@@ -31,11 +31,11 @@ export default function QueueDisplay() {
 
     // Set up real-time subscription
     const subscription = supabase
-      .channel('requests')
+      .channel('song_requests')
       .on('postgres_changes', { 
         event: '*', 
         schema: 'public', 
-        table: 'requests' 
+        table: 'song_requests' 
       }, payload => {
         console.log('Change received!', payload)
         fetchRequests()
@@ -59,7 +59,13 @@ export default function QueueDisplay() {
           {requests.map((request) => (
             <li key={request.id} className="py-4">
               <p className="font-medium">{request.song_title}</p>
-              <p className="text-sm text-gray-500">{request.requester_name}</p>
+              <p className="text-sm text-gray-500">
+                {request.artist && `by ${request.artist} • `}
+                Requested by {request.requested_by}
+              </p>
+              {request.dedication && (
+                <p className="mt-1 text-sm italic">&ldquo;{request.dedication}&rdquo;</p>
+              )}
             </li>
           ))}
         </ul>
