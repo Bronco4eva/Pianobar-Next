@@ -21,13 +21,64 @@ export type Database = {
           updated_at?: string
         }
       }
-      requests: {
+      shows: {
         Row: {
           id: string
-          song_title: string
-          requester_name: string
+          pianist_id: string
+          venue: string
+          start_time: string
+          end_time: string | null
+          status: 'active' | 'completed' | 'cancelled'
           created_at: string
-          status: 'pending' | 'accepted' | 'completed' | 'rejected'
+        }
+      }
+      song_requests: {
+        Row: {
+          id: string
+          show_id: string
+          song_title: string
+          artist: string | null
+          requested_by: string
+          dedication: string | null
+          tip_amount: number
+          created_at: string
+          claimed_at: string | null
+          completed_at: string | null
+          claimed_by: string | null
+          status: 'pending' | 'claimed' | 'completed'
+          queue_position: number | null
+        }
+      }
+      pianist_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          display_name: string
+          bio: string | null
+          profile_image_url: string | null
+          specialties: string[] | null
+          created_at: string
+          updated_at: string
+        }
+      }
+      song_history: {
+        Row: {
+          id: string
+          request_id: string
+          played_at: string
+          duration: number | null
+          notes: string | null
+        }
+      }
+      show_stats: {
+        Row: {
+          id: string
+          show_id: string
+          total_requests: number
+          completed_requests: number
+          total_tips: number
+          peak_queue_length: number
+          average_wait_time: number
         }
       }
     }
