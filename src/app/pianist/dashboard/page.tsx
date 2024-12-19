@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { Database } from '@/lib/types/database'
+
+type Profile = Database['public']['Tables']['profiles']['Row']
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<any>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
     const getProfile = async () => {

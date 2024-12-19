@@ -2,9 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { Database } from '@/lib/types/database'
+
+type Request = Database['public']['Tables']['requests']['Row']
 
 export default function QueueDisplay() {
-  const [requests, setRequests] = useState<any[]>([])
+  const [requests, setRequests] = useState<Request[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
